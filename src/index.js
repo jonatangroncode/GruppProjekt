@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 
 
@@ -7,7 +6,7 @@ const app = express();      // Express-app
 
 
 
-app.use(bodyParser.json());   // Middleware hantera i kommande requests json-data 
+app.use(express.json());
 
 
 app.use(cors());   // Middleware Tillåta begräsningar från andra domäner
