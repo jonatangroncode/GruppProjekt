@@ -7,9 +7,6 @@ const app = express();      // Express-app
 
 app.use(express.json()); 
 
-app.use(express.json());
-
-
 app.use(cors());   // Middleware Tillåta begräsningar från andra domäner
 
 
