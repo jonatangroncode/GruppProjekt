@@ -21,4 +21,11 @@ app.use((req, res) => res.status(404).json({ message: "Route not found." }));
 
 // Middleware for handling internal server errors
 app.use((err, req, res, next) => {
- 
+  console.error(err);
+  res.status(500).json({ message: "Internal server error." });
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
