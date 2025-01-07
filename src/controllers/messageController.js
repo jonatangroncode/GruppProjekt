@@ -68,10 +68,15 @@ exports.getAllMessages = async (req, res) => {
 exports.deleteMessage = async (req, res) => {
    try {
       const { msgID } = req.params;
+      const userID = req.user.id;
 
       const message = await Message.findById(msgID);
       if (!message) {
          return res.status(404).json({ error: 'Kunde inte hitta meddelandet.' });
+      }
+
+      if (message.userID.toString() !== userID) {
+         return res.status(403).json({ error: 'Du har inte rätt att ta bort meddelandet.' });
       }
 
       await Message.findByIdAndDelete(msgID);
