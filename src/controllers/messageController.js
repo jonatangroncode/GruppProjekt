@@ -3,19 +3,26 @@ const { Message, Conversation } = require('../models/Message.js');
 
 exports.postMessage = async (req, res) => {
    try {
-      const { sender, receiver, content, conversationId } = req.body;
+      const { sender, receiver, content } = req.body;
 
-      if (!sender || !receiver || !content || !conversationId) {
+      if (!sender || !receiver || !content) {
             return res.status(400).json({ error: 'Sender, receiver, content, conversationId måste finnas med.' });
       }
 
+      let conversation = await Conversation.findOne({ participants: { $all: [sender, receiver] } });
+      
+      if (!conversation) {
+         conversation = new Conversation({ participants: [sender, receiver] });
+         await conversation.save();
+      }
       //kolla om konversationen finns
-      const conversation = await Conversation.findById(conversationId);   
+      //ÄNDRAD till att skicka till databasen för tillfället
+      /*const conversation = await Conversation.findById(conversationId);   
       if (!conversation) {
          return res.status(404).json({ error: 'Konversationen hittades inte.' });
       }
-
-      const message = new Message({ sender, receiver, content, conversationId });
+      */
+      const message = new Message({ sender, receiver, content, conversationId: conversation._id });
       await message.save();
 
       res.status(201).json({
@@ -30,7 +37,7 @@ exports.postMessage = async (req, res) => {
 exports.getMessage = async (req, res) => {
    try {
       const { userId, conversationId } = req.query;
-
+      
       //hämta från specifik konversation
       if (!userId && !conversationId) {
          return res.status(400).json({ error: 'userId eller conversationId behövs.' });

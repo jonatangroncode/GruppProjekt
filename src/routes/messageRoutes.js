@@ -1,20 +1,22 @@
-const express = require('express');
-const router = express.router();
+const express = require("express");
+const router = express.Router();
 const authMiddleware = require('../middlewares/authenticateToken.js');
-const {
+/*const {
    postMessage,
    getMessage,
    getAllMessages,
    deleteMessage,
 } = require('../controllers/messageController.js');
+ */
+const messageController = require('../controllers/messageController.js');
 
-router.post('/messages', postMessage);
+router.post('/', messageController.postMessage);
 
-router.get('/messages', getMessage);
+router.get('/', messageController.getAllMessages);
 
-router.get('/conversations', getAllMessages);
+router.get('/conversations', messageController.getMessage);
 
-router.delete('/messages/:msgID', authMiddleware, deleteMessage);
+router.delete('/:msgID', authMiddleware, messageController.deleteMessage);
 
 
 module.exports = router;

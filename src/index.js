@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const messageRoutes = require("./routes/messageRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -15,6 +16,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Välkommen till Express-servern!");
 });
+
+app.use("/messages", messageRoutes);
 
 // Middleware for 404 errors
 app.use((req, res) => {
